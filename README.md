@@ -1,3 +1,8 @@
+# Data Cleaning in Pandas with Superheroes Data
+
+Import necessary packages and data
+
+
 ```python
 import pandas as pd
 import numpy as np
@@ -295,6 +300,8 @@ powers_df.head()
 
 
 
+The "Unnamed: 0" columnn appears to be an index. To avoid having this be a multi-index for no reason, I will drop it. Then, I will perform some brief EDA.
+
 
 ```python
 heroes_df.drop('Unnamed: 0', axis=1, inplace=True)
@@ -576,7 +583,7 @@ powers_df.describe()
     </tr>
     <tr>
       <td>top</td>
-      <td>Changeling</td>
+      <td>Hulk</td>
       <td>False</td>
       <td>False</td>
       <td>False</td>
@@ -673,6 +680,8 @@ heroes_df.isna().sum()
 
 
 
+There isn't too much I can do about some heroes having an unknown publisher, so those null values will stay. However, since weight is numerical, I will fill the 2 missing values with the mean.
+
 
 ```python
 mean_weight = heroes_df['Weight'].mean()
@@ -696,6 +705,8 @@ heroes_df.isna().sum()
     dtype: int64
 
 
+
+Check to see if any of the super powers contain null values.
 
 
 ```python
@@ -732,11 +743,15 @@ powers_df.isna().any().any()
 
 
 
+Drop any duplicate names and reset the index in the `heroes` dataframe.
+
 
 ```python
 heroes_df.drop_duplicates(subset='name', inplace=True)
 heroes_df.reset_index(drop=True, inplace=True)
 ```
+
+Rename `hero_names` in the `powers` dataframe, convert the dataframe to type `str`, and perform an inner join with `name` as the index.
 
 
 ```python
@@ -962,12 +977,12 @@ female_heroes_df.plot.scatter(x='Height', y='Weight', c='c', label='Female', ax=
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x7fcbe863d690>
+    <matplotlib.axes._subplots.AxesSubplot at 0x7f853cd40bd0>
 
 
 
 
-![png](output_13_1.png)
+![png](output_20_1.png)
 
 
 
@@ -989,7 +1004,7 @@ print('Median height for male heroes: {}'.format(male_heroes_df.Height.median())
 ```
 
 
-![png](output_15_0.png)
+![png](output_22_0.png)
 
 
     Mean height for male heroes: 109.11201629327903
@@ -1004,7 +1019,7 @@ print('Median weight for male heroes: {}'.format(male_heroes_df.Weight.median())
 ```
 
 
-![png](output_16_0.png)
+![png](output_23_0.png)
 
 
     Mean weight for male heroes: 53.519053342681936
@@ -1019,7 +1034,7 @@ print('Median height for female heroes: {}'.format(female_heroes_df.Height.media
 ```
 
 
-![png](output_17_0.png)
+![png](output_24_0.png)
 
 
     Mean height for female heroes: 97.99234693877551
@@ -1035,7 +1050,7 @@ print('Median weight for female heroes: {}'.format(male_heroes_df.Weight.median(
 ```
 
 
-![png](output_18_0.png)
+![png](output_25_0.png)
 
 
     Mean weight for female heroes: 27.433673469387756
@@ -1070,7 +1085,7 @@ for feat in ['Height', 'Weight']:
 ```
 
 
-![png](output_20_0.png)
+![png](output_27_0.png)
 
 
     Mean Height for Male heroes: 192.62314540059347
@@ -1078,7 +1093,7 @@ for feat in ['Height', 'Weight']:
 
 
 
-![png](output_20_2.png)
+![png](output_27_2.png)
 
 
     Mean Height for Female heroes: 174.90671641791045
@@ -1086,7 +1101,7 @@ for feat in ['Height', 'Weight']:
 
 
 
-![png](output_20_4.png)
+![png](output_27_4.png)
 
 
     Mean Weight for Male heroes: 126.84594103842267
@@ -1094,7 +1109,7 @@ for feat in ['Height', 'Weight']:
 
 
 
-![png](output_20_6.png)
+![png](output_27_6.png)
 
 
     Mean Weight for Female heroes: 80.34848484848484
@@ -1167,7 +1182,7 @@ top_5_bar_chart(marvel_top_5, publisher='Marvel Comics')
 
 
 
-![png](output_24_1.png)
+![png](output_31_1.png)
 
 
 
@@ -1179,7 +1194,7 @@ top_5_bar_chart(marvel_top_5, publisher='Marvel Comics')
 
 
 
-![png](output_24_4.png)
+![png](output_31_4.png)
 
 
 
@@ -1191,7 +1206,7 @@ top_5_bar_chart(marvel_top_5, publisher='Marvel Comics')
 
 
 
-![png](output_24_7.png)
+![png](output_31_7.png)
 
 
 
