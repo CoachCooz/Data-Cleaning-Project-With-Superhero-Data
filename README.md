@@ -576,7 +576,7 @@ powers_df.describe()
     </tr>
     <tr>
       <td>top</td>
-      <td>Cannonball</td>
+      <td>Changeling</td>
       <td>False</td>
       <td>False</td>
       <td>False</td>
@@ -962,7 +962,7 @@ female_heroes_df.plot.scatter(x='Height', y='Weight', c='c', label='Female', ax=
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x7fd13cbcbf90>
+    <matplotlib.axes._subplots.AxesSubplot at 0x7fcbe863d690>
 
 
 
@@ -1040,6 +1040,158 @@ print('Median weight for female heroes: {}'.format(male_heroes_df.Weight.median(
 
     Mean weight for female heroes: 27.433673469387756
     Median weight for female heroes: 79.0
+
+
+
+```python
+print('Top Negative Heights:')
+print(heroes_df[heroes_df.Height < 0].Height.value_counts())
+
+print('Top Negative Weights:')
+print(heroes_df[heroes_df.Weight < 0].Weight.value_counts())
+```
+
+    Top Negative Heights:
+    -99.0    209
+    Name: Height, dtype: int64
+    Top Negative Weights:
+    -99.0    229
+    Name: Weight, dtype: int64
+
+
+
+```python
+for feat in ['Height', 'Weight']:
+    df = heroes_and_powers_df[heroes_and_powers_df[feat]>0] #Temporarily remove negatives
+    for group in ['Male', 'Female']:
+        show_distplot(df[df['Gender']==group], group, feat)
+        print('Mean {} for {} heroes: {}'.format(feat, group, df[df['Gender']==group][feat].mean()))
+        print('Median {} for {} heroes: {}'.format(feat, group, df[df['Gender']==group][feat].median()))
+```
+
+
+![png](output_20_0.png)
+
+
+    Mean Height for Male heroes: 192.62314540059347
+    Median Height for Male heroes: 185.0
+
+
+
+![png](output_20_2.png)
+
+
+    Mean Height for Female heroes: 174.90671641791045
+    Median Height for Female heroes: 170.0
+
+
+
+![png](output_20_4.png)
+
+
+    Mean Weight for Male heroes: 126.84594103842267
+    Median Weight for Male heroes: 90.0
+
+
+
+![png](output_20_6.png)
+
+
+    Mean Weight for Female heroes: 80.34848484848484
+    Median Weight for Female heroes: 57.5
+
+
+
+```python
+def top_5_powers(dataframe):
+    df = dataframe.drop(heroes_df.columns.values[1:], axis=1)
+    columns = df.columns.values
+    for col in columns:
+        df[col] = df[col].map({'True': 1, 'False': 0})
+        
+    power_counts_dict = dict(df.sum())
+    
+    return sorted(power_counts_dict.items(), key=lambda x: x[1], reverse=True)[:5] 
+    
+overall_top_5 = top_5_powers(heroes_and_powers_df)
+marvel_df = heroes_and_powers_df[heroes_and_powers_df['Publisher'] == 'Marvel Comics']
+dc_df = heroes_and_powers_df[heroes_and_powers_df['Publisher'] == 'DC Comics']
+print(overall_top_5)
+```
+
+    [('Super Strength', 350), ('Stamina', 281), ('Durability', 251), ('Super Speed', 241), ('Agility', 235)]
+
+
+
+```python
+marvel_top_5 = top_5_powers(marvel_df)
+print(marvel_top_5)
+```
+
+    [('Super Strength', 199), ('Durability', 148), ('Stamina', 145), ('Super Speed', 132), ('Agility', 121)]
+
+
+
+```python
+dc_top_5 = top_5_powers(dc_df)
+print(dc_top_5)
+```
+
+    [('Super Strength', 103), ('Flight', 83), ('Stamina', 83), ('Super Speed', 75), ('Agility', 68)]
+
+
+
+```python
+def top_5_bar_chart(top_5_list, publisher=None):
+    marvel_powers = [i[0] for i in top_5_list]
+    marvel_values = [i[1] for i in top_5_list]
+
+    plt.clf()
+    plt.figure(figsize=(11, 8))
+    bar_positions = np.arange(len(marvel_powers))
+    plt.bar(bar_positions, marvel_values)
+    plt.xticks(bar_positions, marvel_powers)
+    if publisher:
+        plt.title('Top 5 Powers in {} Universe'.format(publisher))
+    else:
+        plt.title('Top 5 Powers in Superheroes Dataset')
+    plt.show()
+
+display(top_5_bar_chart(overall_top_5))
+display(top_5_bar_chart(dc_top_5, publisher='DC Comics'))
+top_5_bar_chart(marvel_top_5, publisher='Marvel Comics')
+```
+
+
+    <Figure size 432x288 with 0 Axes>
+
+
+
+![png](output_24_1.png)
+
+
+
+    None
+
+
+
+    <Figure size 432x288 with 0 Axes>
+
+
+
+![png](output_24_4.png)
+
+
+
+    None
+
+
+
+    <Figure size 432x288 with 0 Axes>
+
+
+
+![png](output_24_7.png)
 
 
 
