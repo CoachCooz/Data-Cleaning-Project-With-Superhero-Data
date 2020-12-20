@@ -583,7 +583,7 @@ powers_df.describe()
     </tr>
     <tr>
       <td>top</td>
-      <td>Hulk</td>
+      <td>Indiana Jones</td>
       <td>False</td>
       <td>False</td>
       <td>False</td>
@@ -965,6 +965,8 @@ heroes_and_powers_df.head()
 
 
 
+Create two new dataframes separated by male and female, then create scatter plots on top of each other comparing male superheroes heights and weights & female superheroes heights and weights.
+
 
 ```python
 male_heroes_df = heroes_df[heroes_df['Gender'] == 'Male']
@@ -977,13 +979,15 @@ female_heroes_df.plot.scatter(x='Height', y='Weight', c='c', label='Female', ax=
 
 
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x7f853cd40bd0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x7fef09e877d0>
 
 
 
 
-![png](output_20_1.png)
+![png](output_21_1.png)
 
+
+Write a function to create a distribution plot
 
 
 ```python
@@ -996,6 +1000,8 @@ def show_distplot(df, gender, column_name):
     plt.show()
 ```
 
+Use `show_distplot` function to create a visual for male superhero height, then utilize two `print` statements to calculate mean and median height.
+
 
 ```python
 show_distplot(male_heroes_df, 'Male', 'Height')
@@ -1004,12 +1010,14 @@ print('Median height for male heroes: {}'.format(male_heroes_df.Height.median())
 ```
 
 
-![png](output_22_0.png)
+![png](output_25_0.png)
 
 
     Mean height for male heroes: 109.11201629327903
     Median height for male heroes: 180.0
 
+
+Same process as above for male superhero weights
 
 
 ```python
@@ -1019,12 +1027,14 @@ print('Median weight for male heroes: {}'.format(male_heroes_df.Weight.median())
 ```
 
 
-![png](output_23_0.png)
+![png](output_27_0.png)
 
 
     Mean weight for male heroes: 53.519053342681936
     Median weight for male heroes: 79.0
 
+
+Now calculate female superhero heights
 
 
 ```python
@@ -1034,28 +1044,31 @@ print('Median height for female heroes: {}'.format(female_heroes_df.Height.media
 ```
 
 
-![png](output_24_0.png)
+![png](output_29_0.png)
 
 
     Mean height for female heroes: 97.99234693877551
     Median height for female heroes: 168.0
 
 
+Calculate female superhero weights
+
 
 ```python
-# Female Weight
 show_distplot(female_heroes_df, 'Female', 'Weight')
 print('Mean weight for female heroes: {}'.format(female_heroes_df.Weight.mean()))
 print('Median weight for female heroes: {}'.format(male_heroes_df.Weight.median()))
 ```
 
 
-![png](output_25_0.png)
+![png](output_31_0.png)
 
 
     Mean weight for female heroes: 27.433673469387756
     Median weight for female heroes: 79.0
 
+
+It appears that there are entries for height and weight that contain negative values. Two `print` statements were created below to verify this.
 
 
 ```python
@@ -1074,10 +1087,12 @@ print(heroes_df[heroes_df.Weight < 0].Weight.value_counts())
     Name: Weight, dtype: int64
 
 
+Obviously, having negative heights and weights doesn't really make sense. So, the `for` loop below will remove them.
+
 
 ```python
 for feat in ['Height', 'Weight']:
-    df = heroes_and_powers_df[heroes_and_powers_df[feat]>0] #Temporarily remove negatives
+    df = heroes_and_powers_df[heroes_and_powers_df[feat]>0]
     for group in ['Male', 'Female']:
         show_distplot(df[df['Gender']==group], group, feat)
         print('Mean {} for {} heroes: {}'.format(feat, group, df[df['Gender']==group][feat].mean()))
@@ -1085,7 +1100,7 @@ for feat in ['Height', 'Weight']:
 ```
 
 
-![png](output_27_0.png)
+![png](output_35_0.png)
 
 
     Mean Height for Male heroes: 192.62314540059347
@@ -1093,7 +1108,7 @@ for feat in ['Height', 'Weight']:
 
 
 
-![png](output_27_2.png)
+![png](output_35_2.png)
 
 
     Mean Height for Female heroes: 174.90671641791045
@@ -1101,7 +1116,7 @@ for feat in ['Height', 'Weight']:
 
 
 
-![png](output_27_4.png)
+![png](output_35_4.png)
 
 
     Mean Weight for Male heroes: 126.84594103842267
@@ -1109,12 +1124,14 @@ for feat in ['Height', 'Weight']:
 
 
 
-![png](output_27_6.png)
+![png](output_35_6.png)
 
 
     Mean Weight for Female heroes: 80.34848484848484
     Median Weight for Female heroes: 57.5
 
+
+Next, this function will iterate through each entry and designate whether each hero possesses a certain super power or not. Then, the dictionary, `power_counts_dict`, will be created, where the sum of each super power in `df` will be calculated and kept. Next, the function will sort the entries listed in the dictionary, with the most frequent entry appearing first. Lastly, three new dataframes will be created: one for all of the superheroes, another for just Marvel heroes, and a third for DC heroes. The function is first used on the overall heroes dataframe, followed by the marvel and DC dataframes, respetively, to display what the most common powers are for each group.
 
 
 ```python
@@ -1155,6 +1172,8 @@ print(dc_top_5)
     [('Super Strength', 103), ('Flight', 83), ('Stamina', 83), ('Super Speed', 75), ('Agility', 68)]
 
 
+And last but not least, this function will take the same data created earlier and display it in a nice bar chart so that it is more appealing to the eye.
+
 
 ```python
 def top_5_bar_chart(top_5_list, publisher=None):
@@ -1182,7 +1201,7 @@ top_5_bar_chart(marvel_top_5, publisher='Marvel Comics')
 
 
 
-![png](output_31_1.png)
+![png](output_41_1.png)
 
 
 
@@ -1194,7 +1213,7 @@ top_5_bar_chart(marvel_top_5, publisher='Marvel Comics')
 
 
 
-![png](output_31_4.png)
+![png](output_41_4.png)
 
 
 
@@ -1206,10 +1225,5 @@ top_5_bar_chart(marvel_top_5, publisher='Marvel Comics')
 
 
 
-![png](output_31_7.png)
+![png](output_41_7.png)
 
-
-
-```python
-
-```
